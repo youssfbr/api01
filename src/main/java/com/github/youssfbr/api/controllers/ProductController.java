@@ -1,6 +1,8 @@
 package com.github.youssfbr.api.controllers;
 
-import com.github.youssfbr.api.entities.Product;
+import com.github.youssfbr.api.dtos.ProductRequestDTO;
+import com.github.youssfbr.api.dtos.ProductRequestUpdateDTO;
+import com.github.youssfbr.api.dtos.ProductResponseDTO;
 import com.github.youssfbr.api.services.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,26 +16,36 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/products")
 public class ProductController {
+
     private final IProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
+    public ResponseEntity<List<ProductResponseDTO>> getAllProducts() {
         return ResponseEntity.ok(productService.getAllProduts());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProdutById(id));
     }
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO productRequestDTO) {
 
-        Product productCreated = productService.createProduct(product);
+        ProductResponseDTO productCreated = productService.createProduct(productRequestDTO);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(productCreated.getId())
+                .buildAndExpand(productCreated.id())
                 .toUri();
 
         return ResponseEntity.created(location).body(productCreated);
+    }
+    @PutMapping
+    public ResponseEntity<ProductResponseDTO> updateProduct(@RequestBody ProductRequestUpdateDTO productRequestUpdateDTO) {
+        return ResponseEntity.ok(productService.updateProduct(productRequestUpdateDTO));
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
     }
 }

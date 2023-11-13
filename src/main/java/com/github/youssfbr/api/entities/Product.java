@@ -1,5 +1,7 @@
 package com.github.youssfbr.api.entities;
 
+import com.github.youssfbr.api.dtos.ProductRequestDTO;
+import com.github.youssfbr.api.dtos.ProductRequestUpdateDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,5 +21,16 @@ public class Product {
     private Long id;
     private String name;
     private Double price;
+
+    public Product(ProductRequestDTO productRequestDTO) {
+        setName(productRequestDTO.name());
+        setPrice(productRequestDTO.price());
+    }
+    public Product(ProductRequestUpdateDTO productRequestUpdateDTO) {
+        setId(productRequestUpdateDTO.id());
+        setName(productRequestUpdateDTO.name());
+        setPrice(productRequestUpdateDTO.price());
+    }
+
 
 }

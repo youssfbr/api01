@@ -6,6 +6,7 @@ import com.github.youssfbr.api.dtos.ProductResponseDTO;
 import com.github.youssfbr.api.entities.Product;
 import com.github.youssfbr.api.repositories.IProductRepository;
 import com.github.youssfbr.api.services.IProductService;
+import com.github.youssfbr.api.services.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.List;
 public class ProductService implements IProductService {
 
     private final IProductRepository productRepository;
+    private static final String NOT_FOUND = "Recurso não encontrado com id ";
 
     @Override
     @Transactional(readOnly = true)
@@ -32,7 +34,7 @@ public class ProductService implements IProductService {
     public ProductResponseDTO getProdutById(Long id) {
         return productRepository.findProductByIdAndActiveTrue(id)
                 .map(ProductResponseDTO::new)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND + id));
     }
 
     @Override
@@ -49,15 +51,17 @@ public class ProductService implements IProductService {
     @Transactional
     public ProductResponseDTO updateProduct(ProductRequestUpdateDTO productRequestUpdateDTO) {
 
-        findProduct(productRequestUpdateDTO.id());
+        Product productToUpdate = findProduct(productRequestUpdateDTO.id());
+        productToUpdate.setName(productRequestUpdateDTO.name());
+        productToUpdate.setPrice(productToUpdate.getPrice());
 
-        Product productToUpdate = new Product(productRequestUpdateDTO);
         Product productUpdated = productRepository.save(productToUpdate);
 
         return new ProductResponseDTO(productUpdated);
     }
 
     @Override
+    @Transactional
     public void deleteProduct(Long id) {
         Product product = findProduct(id);
         product.setActive(false);
@@ -65,6 +69,7 @@ public class ProductService implements IProductService {
     }
 
     private Product findProduct(Long id) {
-        return productRepository.findProductByIdAndActiveTrue(id).orElseThrow(IllegalArgumentException::new);
+        return productRepository.findProductByIdAndActiveTrue(id)
+                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND + id));
     }
 }

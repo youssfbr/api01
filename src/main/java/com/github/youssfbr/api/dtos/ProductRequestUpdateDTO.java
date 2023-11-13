@@ -1,4 +1,5 @@
 package com.github.youssfbr.api.dtos;
 
-public record ProductRequestUpdateDTO(Long id, String name, Double price) {
-}
+import java.time.LocalDate;
+
+public record ProductRequestUpdateDTO(Long id, String name, Double price, Boolean active, LocalDate moment) { }

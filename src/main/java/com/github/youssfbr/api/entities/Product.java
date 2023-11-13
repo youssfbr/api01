@@ -21,6 +21,8 @@ public class Product {
     private String name;
     private Double price;
     private Boolean active;
+
+    @Column(updatable = false)
     private LocalDate moment;
 
     public Product(ProductRequestDTO productRequestDTO) {
@@ -31,6 +33,8 @@ public class Product {
         setId(productRequestUpdateDTO.id());
         setName(productRequestUpdateDTO.name());
         setPrice(productRequestUpdateDTO.price());
+        setMoment(productRequestUpdateDTO.moment());
+        setActive(productRequestUpdateDTO.active()); // == null ?
     }
 
     @PrePersist

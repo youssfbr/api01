@@ -21,7 +21,7 @@ public class ProductService implements IProductService {
     @Override
     @Transactional(readOnly = true)
     public List<ProductResponseDTO> getAllProduts() {
-        return productRepository.findAll()
+        return productRepository.findAllByActiveTrue()
                 .stream()
                 .map(ProductResponseDTO::new)
                 .toList();
@@ -30,7 +30,7 @@ public class ProductService implements IProductService {
     @Override
     @Transactional(readOnly = true)
     public ProductResponseDTO getProdutById(Long id) {
-        return productRepository.findById(id)
+        return productRepository.findProductByIdAndActiveTrue(id)
                 .map(ProductResponseDTO::new)
                 .orElseThrow(IllegalArgumentException::new);
     }
@@ -59,11 +59,12 @@ public class ProductService implements IProductService {
 
     @Override
     public void deleteProduct(Long id) {
-        findProduct(id);
-        productRepository.deleteById(id);
+        Product product = findProduct(id);
+        product.setActive(false);
+        productRepository.save(product);
     }
 
     private Product findProduct(Long id) {
-        return productRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        return productRepository.findProductByIdAndActiveTrue(id).orElseThrow(IllegalArgumentException::new);
     }
 }

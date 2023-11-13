@@ -2,11 +2,10 @@ package com.github.youssfbr.api.entities;
 
 import com.github.youssfbr.api.dtos.ProductRequestDTO;
 import com.github.youssfbr.api.dtos.ProductRequestUpdateDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -21,6 +20,8 @@ public class Product {
     private Long id;
     private String name;
     private Double price;
+    private Boolean active;
+    private LocalDate moment;
 
     public Product(ProductRequestDTO productRequestDTO) {
         setName(productRequestDTO.name());
@@ -32,5 +33,10 @@ public class Product {
         setPrice(productRequestUpdateDTO.price());
     }
 
+    @PrePersist
+    private void prePersist() {
+        setActive(true);
+        setMoment(LocalDate.now());
+    }
 
 }

@@ -1,1 +1,1 @@
-INSERT INTO TB_PRODUCT (name, price) VALUES ('MacBook', 8000.0);
+INSERT INTO TB_PRODUCT (name, price, moment, active) VALUES ('MacBook', 8000.0, NOW(), true);

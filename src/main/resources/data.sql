@@ -1,0 +1,1 @@
+INSERT INTO TB_PRODUCT (name, price) VALUES ('MacBook', 8000.0);

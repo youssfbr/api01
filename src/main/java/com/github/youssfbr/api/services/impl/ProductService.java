@@ -20,4 +20,10 @@ public class ProductService implements IProductService {
     public List<Product> getAllProduts() {
         return productRepository.findAll();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Product getProdutById(Long id) {
+        return productRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+    }
 }

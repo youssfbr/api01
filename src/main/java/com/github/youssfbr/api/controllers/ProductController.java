@@ -4,11 +4,10 @@ import com.github.youssfbr.api.entities.Product;
 import com.github.youssfbr.api.services.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -24,5 +23,17 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProdutById(id));
+    }
+    @PostMapping
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+
+        Product productCreated = productService.createProduct(product);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(productCreated.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(productCreated);
     }
 }

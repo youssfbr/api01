@@ -26,4 +26,10 @@ public class ProductService implements IProductService {
     public Product getProdutById(Long id) {
         return productRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
+
+    @Override
+    @Transactional
+    public Product createProduct(Product product) {
+        return productRepository.save(product);
+    }
 }

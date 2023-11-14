@@ -18,6 +18,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private Double price;
     private Boolean active;
@@ -34,7 +35,7 @@ public class Product {
         setName(productRequestUpdateDTO.name());
         setPrice(productRequestUpdateDTO.price());
         setMoment(productRequestUpdateDTO.moment());
-        setActive(productRequestUpdateDTO.active()); // == null ?
+        setActive(productRequestUpdateDTO.active());
     }
 
     @PrePersist

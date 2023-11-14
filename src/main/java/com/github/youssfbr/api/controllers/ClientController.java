@@ -1,6 +1,6 @@
 package com.github.youssfbr.api.controllers;
 
-import com.github.youssfbr.api.entities.Client;
+import com.github.youssfbr.api.dtos.ClientResponseDTO;
 import com.github.youssfbr.api.services.IClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +19,11 @@ public class ClientController {
     private final IClientService clientService;
 
     @GetMapping
-    public ResponseEntity<List<Client>> getAllProducts() {
+    public ResponseEntity<List<ClientResponseDTO>> getAllProducts() {
         return ResponseEntity.ok(clientService.getAllClients());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Client> getClientById(@PathVariable Long id) {
+    public ResponseEntity<ClientResponseDTO> getClientById(@PathVariable Long id) {
         return ResponseEntity.ok(clientService.getClientById(id));
     }
 

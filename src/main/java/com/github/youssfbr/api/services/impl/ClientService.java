@@ -20,4 +20,10 @@ public class ClientService implements IClientService {
     public List<Client> getAllClients() {
         return clientRepository.findAllByActiveTrue();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Client getClientById(Long id) {
+        return clientRepository.findByIdAndActiveTrue(id).orElseThrow();
+    }
 }

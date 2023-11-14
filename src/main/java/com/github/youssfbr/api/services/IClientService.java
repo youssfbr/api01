@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface IClientService {
     List<Client> getAllClients();
+    Client getClientById(Long id);
 }
